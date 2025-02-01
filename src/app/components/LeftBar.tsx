@@ -1,11 +1,11 @@
 import React from 'react'
 
-const HomePage = () => {
+const LeftBar = () => {
   return (
     <div>
-      HomePage
+      LeftBar
     </div>
   )
 }
 
-export default HomePage
+export default LeftBar

@@ -1,11 +1,11 @@
 import React from 'react'
 
-const HomePage = () => {
+const RightBar = () => {
   return (
     <div>
-      HomePage
+      RightBar
     </div>
   )
 }
 
-export default HomePage
+export default RightBar
