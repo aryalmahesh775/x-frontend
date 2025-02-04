@@ -3,6 +3,8 @@ import Image from "./Image";
 import PostInfo from "./PostInfo";
 import PostIntraction from "./PostIntraction";
 import { imagekit } from "@/utils";
+import { Video } from "./Video";
+import Link from "next/link";
 
 interface FileDetailsResponse {
   width: number;
@@ -13,7 +15,7 @@ interface FileDetailsResponse {
   customMetadata?: { sensitive: boolean };
 }
 
-const Post = async () => {
+const Post = async ({ type }: { type?: "status" | "comment" }) => {
   const getFieldDetails = async (
     fieldId: string
   ): Promise<FileDetailsResponse> => {
@@ -26,8 +28,7 @@ const Post = async () => {
   };
 
   const fileDetails = await getFieldDetails("67a0f346432c476416614b27");
-
-  // console.log(fileDetails)
+  // const fileDetails = await getFieldDetails("67a19bff432c4764164f70fc");
 
   return (
     <div className="p-4 border-y-[1px] border-borderGray">
@@ -47,37 +48,79 @@ const Post = async () => {
         <span className="">dev reposted</span>
       </div>
       {/* Post content */}
-      <div className="flex gap-4">
+      {/* <div className="flex gap-4"> */}
+      <div className={`flex gap-4 ${type === "status" && "flex-col"}`}>
         {/* Avatar */}
-        <div className="relative w-10 h-10 rounded-full overflow-hidden">
+        <div
+          className={` ${
+            type === "status" && "hidden"
+          } relative w-10 h-10 rounded-full overflow-hidden`}
+        >
           <Image path="general/avatar.png" alt="" w={100} h={100} tr={true} />
         </div>
         {/* Content */}
         <div className="flex-1 flex flex-col gap-2">
           {/* top */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-md font-bold">Mahesh Aryal</h1>
-              <span className="text-textGray">@10962</span>
-              <span className="text-textGray">1 days ago</span>
-            </div>
+          <div className="w-full flex justify-between">
+            <Link href={`/mahesh`} className="flex gap-4">
+              <div
+                className={` ${
+                  type !== "status" && "hidden"
+                } relative w-10 h-10 rounded-full overflow-hidden`}
+              >
+                <Image
+                  path="general/avatar.png"
+                  alt=""
+                  w={100}
+                  h={100}
+                  tr={true}
+                />
+              </div>
+              <div
+                className={`flex items-center gap-2 flex-wrap ${
+                  type === "status" && "flex-col gap-0 !items-start"
+                }`}
+              >
+                <h1 className="text-md font-bold">Mahesh Aryal</h1>
+                <span
+                  className={`text-textGray ${type === "status" && "text-sm"}`}
+                >
+                  @10962
+                </span>
+                {type !== "status" && (
+                  <span className="text-textGray">1 days ago</span>
+                )}
+              </div>
+            </Link>
             <PostInfo />
           </div>
           {/* Text and media */}
-          <p className="">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum fugit
-            voluptatem eum similique eos magni porro, blanditiis cumque voluptas
-            tenetur nulla vero rerum voluptatum saepe architecto dolor sapiente.
-            Sunt, voluptates.
-          </p>
+          <Link href={`/maheshAryal/status/1`}>
+            <p className={`${type === "status" && "text-lg"}`}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum
+              fugit voluptatem eum similique eos magni porro, blanditiis cumque
+              voluptas tenetur nulla vero rerum voluptatum saepe architecto
+              dolor sapiente. Sunt, voluptates.
+            </p>
+          </Link>
           {/* <Image path="general/post.jpeg" alt="" w={600} h={600} /> */}
-          <Image
-            path={fileDetails.filePath}
-            alt=""
-            w={fileDetails.width}
-            h={fileDetails.height}
-            className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
-          />
+          {fileDetails && fileDetails.fileType === "image" ? (
+            <Image
+              path={fileDetails.filePath}
+              alt=""
+              w={fileDetails.width}
+              h={fileDetails.height}
+              // className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
+            />
+          ) : (
+            <Video
+              path={fileDetails.filePath}
+              className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
+            />
+          )}
+          {type === "status" && (
+            <span className="text-textGray">8:58 PM Feb 4, 2025</span>
+          )}
           <PostIntraction />
         </div>
       </div>

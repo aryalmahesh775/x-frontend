@@ -26,7 +26,10 @@ const Share = () => {
   const previewUrl = media ? URL.createObjectURL(media) : null;
 
   return (
-    <form className="p-4 flex gap-4" action={(formData) => shareAction(formData, settings)}>
+    <form
+      className="p-4 flex gap-4"
+      action={(formData) => shareAction(formData, settings)}
+    >
       {/* Avatar */}
       <div className="relative w-10 h-10 rounded-full overflow-hidden">
         <Image path="general/avatar.png" alt="" w={100} h={100} tr={true} />
@@ -40,20 +43,37 @@ const Share = () => {
           className="bg-transparent outline-none placeholder:text-textGray"
         />
         {/* preview Image */}
-        {previewUrl && (
+        {media?.type.includes("image") && previewUrl && (
           <div className="relative rounded-xl overflow-hidden">
-            <NextImage src={previewUrl} alt="" width={600} height={600} className={`w-full ${
-              settings.type === "original"
-                ? "h-full object-contain"
-                : settings.type === "square"
-                ? "aspect-square object-cover"
-                : "aspect-video object-cover"
-            }`} />
+            <NextImage
+              src={previewUrl}
+              alt=""
+              width={600}
+              height={600}
+              className={`w-full ${
+                settings.type === "original"
+                  ? "h-full object-contain"
+                  : settings.type === "square"
+                  ? "aspect-square object-cover"
+                  : "aspect-video object-cover"
+              }`}
+            />
             <div
               className="absolute top-2 left-2 bg-black bg-opacity-50 text-white py-1 px-4 rounded-full font-bold text-sm cursor-pointer"
               onClick={() => setIsEditorOpen(true)}
             >
               Edit
+            </div>
+            <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white h-8 w-8 flex items-center justify-center rounded-full cursor-pointer font-bold text-sm" onClick={() => setMedia(null)}>
+              X
+            </div>
+          </div>
+        )}
+        {media?.type.includes("video") && previewUrl && (
+          <div className="relative">
+            <video src={previewUrl} controls />
+            <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white h-8 w-8 flex items-center justify-center rounded-full cursor-pointer font-bold text-sm" onClick={() => setMedia(null)}>
+              x
             </div>
           </div>
         )}
@@ -73,6 +93,7 @@ const Share = () => {
               className="hidden"
               name="file"
               id="file"
+              accept="image/*, video/*"
             />
             <label htmlFor="file">
               <Image

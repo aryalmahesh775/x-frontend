@@ -8,7 +8,7 @@ type ImageType = {
   h?: number;
   alt: string;
   className?: string;
-  tr?:boolean
+  tr?: boolean;
 };
 
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
@@ -23,9 +23,9 @@ const Image = ({ path, w, h, alt, className, tr }: ImageType) => {
         // height={h}
         // transformation={[{width:`${w}`, height:`${h}`}]}
         {...(tr
-             ? {transformation: [{width:`${w}`, height:`${h}`}]}
-             : {width:w, height:h}
-            )}
+          ? { transformation: [{ width: `${w}`, height: `${h}` }] }
+          : { width: w, height: h })}
+        lqip={{ active: true, quality: 20 }}
         alt={alt}
         className={className}
       />
